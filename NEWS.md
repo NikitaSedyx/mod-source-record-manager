@@ -1,16 +1,29 @@
-## 2023-xx-xx v3.7.0-SNAPSHOT
+## 2023-10-10 v3.7.0
 * [MODSOURMAN-1045](https://issues.folio.org/browse/MODSOURMAN-1045) Allow create action with non-matches for instance without match profile
 * [MODSOURMAN-1003](https://issues.folio.org/browse/MODSOURMAN-1003) Allow create action with non-matches for instance
 * [MODSOURMAN-1029](https://issues.folio.org/browse/MODSOURMAN-1029) Introduce Global Backpressure For Kafka Consumption
 * [MODSOURMAN-1031](https://issues.folio.org/browse/MODSOURMAN-1031) The status of holdings is not displayed in the Import log after uploading file for creating holdings
+* [MODSOURMAN-1014](https://issues.folio.org/browse/MODSOURMAN-1014) Upgrade folio-kafka-wrapper to 3.0.0 version
 * [MODSOURMAN-1011](https://issues.folio.org/browse/MODSOURMAN-1011) Import An Instance With A Known Identifier (new acceptInstanceId parameter)
 * [MODSOURMAN-999](https://issues.folio.org/browse/MODSOURMAN-999) Upgrade mod-source-record-manager to Java 17
 * [MODSOURMAN-974](https://issues.folio.org/browse/MODSOURMAN-974) MARC bib $9 handling | Remove $9 subfields from linkable fields
 * [MODSOURMAN-971](https://issues.folio.org/browse/MODSOURMAN-971) Adjust journal records population to create multiple journal records for each Holdings/Item
-* [MODSOURMAN-1014](https://issues.folio.org/browse/MODSOURMAN-1014) Upgrade folio-kafka-wrapper to 3.0.0 version
 * [MODDATAIMP-866](https://issues.folio.org/browse/MODDATAIMP-866) Add composite job types to support DI splitting workflow (bump interface `source-manager-job-executions` to version `3.3`)
 
-## 2023-03-xo v3.6.1-SNAPSHOT
+## 2023-10-06 v3.6.5 **only for Orchid**
+* [MODDATAIMP-866](https://issues.folio.org/browse/MODDATAIMP-866) Add composite parent and child job types for new DI splitting workflow (bump interface `source-manager-job-executions` to version `3.3`)
+
+## 2023-07-31 v3.6.4
+* [MODSOURMAN-987](https://issues.folio.org/browse/MODSOURMAN-987) No title displays in import log when SRS MARC and Instance are not updated
+
+## 2023-06-27 v3.6.3
+* [MODSOURMAN-1005](https://issues.folio.org/browse/MODSOURMAN-1005) Define changes needed to allow R/W split of the DB (MODSOURMAN-966)
+* [MODSOURMAN-1007](https://issues.folio.org/browse/MODSOURMAN-1007) Investigate Timeout exceptions during big imports (MODSOURMAN-989)
+
+## 2023-03-29 v3.6.2
+* folio-kafka-wrapper bumped up to 2.7.1
+
+## 2023-03-29 v3.6.1
 * [MODSOURMAN-957](https://issues.folio.org/browse/MODSOURMAN-957) The '1' number of SRS MARC and Instance are displayed in cells in the row with the 'Updated' row header at the individual import job's log
 * [MODDATAIMP-786](https://issues.folio.org/browse/MODDATAIMP-786) Update data-import-util library to v1.11.0
 * [MODSOURMAN-965](https://issues.folio.org/browse/MODSOURMAN-965) Adjust progress tracking mechanism with regard to multiple values being created
