@@ -536,7 +536,11 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
 
     return rawRecords.stream()
       .map(rawRecord -> {
+        System.out.println("tsaghik before: " + rawRecord.getRecord());
+
         var parsedResult = parser.parseRecord(rawRecord.getRecord());
+
+        System.out.println("tsaghik parsedRecord: " + parsedResult);
 
         if (!acceptInstanceId) {
           parsedResult = addErrorMessageWhen999ffFieldExistsOnCreateAction(jobExecution, parsedResult);
