@@ -74,7 +74,7 @@ public abstract class AbstractChunkProcessingService implements ChunkProcessingS
       .withChunkSize(incomingChunk.getInitialRecords().size())
       .withCreatedDate(new Date());
 
-    System.out.println("tsaghik sourceChunk: " + incomingChunk.getInitialRecords().get(0).getRecord());
+//    System.out.println("tsaghik sourceChunk: " + incomingChunk.getInitialRecords().get(0).getRecord());
     return jobExecutionSourceChunkDao.save(sourceChunk, params.getTenantId())
       .compose(ar -> processRawRecordsChunk(incomingChunk, sourceChunk, jobExecution.getId(), acceptInstanceId, params))
       .map(true)
