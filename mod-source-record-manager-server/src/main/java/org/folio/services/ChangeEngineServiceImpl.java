@@ -568,7 +568,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
             postProcessMarcRecord(record, rawRecord);
           }
         }
-        System.out.printf("tsaghik record", record.getParsedRecord());
+        System.out.printf("tsaghik record", record.getParsedRecord().getContent());
         return record;
       }).collect(Collectors.toList());
   }
