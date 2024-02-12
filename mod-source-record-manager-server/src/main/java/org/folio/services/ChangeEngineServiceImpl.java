@@ -532,6 +532,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
                                                          JobExecution jobExecution,
                                                          boolean acceptInstanceId,
                                                          String sourceChunkId) {
+    System.out.println("tsaghik recordContentType: " + recordContentType);
     var parser = RecordParserBuilder.buildParser(recordContentType);
 
     return rawRecords.stream()
@@ -567,6 +568,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
             postProcessMarcRecord(record, rawRecord);
           }
         }
+        System.out.printf("tsaghik record", record.getParsedRecord());
         return record;
       }).collect(Collectors.toList());
   }
