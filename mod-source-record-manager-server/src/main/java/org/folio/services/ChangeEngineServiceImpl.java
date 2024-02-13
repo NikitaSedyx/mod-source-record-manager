@@ -182,7 +182,10 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
       .compose(parsedRecords -> ensureMappingMetaDataSnapshot(jobExecution.getId(), parsedRecords, params)
         .map(parsedRecords))
       .onSuccess(parsedRecords -> {
+        System.out.println("tsaghik parsedRecords+before : " + parsedRecords.get(0).getParsedRecord().getContent());
         fillParsedRecordsWithAdditionalFields(parsedRecords);
+        System.out.println("tsaghik parsedRecords+after : " + parsedRecords.get(0).getParsedRecord().getContent());
+
         processRecords(parsedRecords, jobExecution, params, sourceChunkId, promise);
       }).onFailure(th -> {
         LOGGER.warn("parseRawRecordsChunkForJobExecution:: Error parsing records: {}", th.getMessage());
