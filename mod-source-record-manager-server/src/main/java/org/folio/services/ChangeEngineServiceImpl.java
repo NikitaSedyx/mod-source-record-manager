@@ -196,8 +196,10 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
 
   private void processRecords(List<Record> parsedRecords, JobExecution jobExecution, OkapiConnectionParams params,
                               String sourceChunkId, Promise<List<Record>> promise) {
+    System.out.println("tsaghik getAction" + getAction(parsedRecords, jobExecution).toString());
     switch (getAction(parsedRecords, jobExecution)) {
       case UPDATE_RECORD -> {
+        System.out.println("tsaghik enter UPDATE_RECORD");
         hrIdFieldService.move001valueTo035Field(parsedRecords);
         updateRecords(parsedRecords, jobExecution, params)
           .onSuccess(ar -> promise.complete(parsedRecords)).onFailure(promise::fail);
