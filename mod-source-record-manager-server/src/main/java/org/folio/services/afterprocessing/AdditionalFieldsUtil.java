@@ -205,6 +205,7 @@ public final class AdditionalFieldsUtil {
    * @return true if succeeded, false otherwise
    */
   public static boolean addDataFieldToMarcRecord(Record record, String tag, char ind1, char ind2, char subfield, String value) {
+    System.out.println("tsaghik + addDataFieldToMarcRecord");
     boolean result = false;
     try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
       org.marc4j.marc.Record marcRecord = computeMarcRecord(record);
