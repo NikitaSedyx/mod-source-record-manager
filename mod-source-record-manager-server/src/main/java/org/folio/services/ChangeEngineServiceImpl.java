@@ -200,6 +200,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
 
   private void processRecords(List<Record> parsedRecords, JobExecution jobExecution, OkapiConnectionParams params,
                               String sourceChunkId, Promise<List<Record>> promise) {
+    System.out.println("tsaghik " + getAction(parsedRecords, jobExecution).toString());
     switch (getAction(parsedRecords, jobExecution)) {
       case UPDATE_RECORD -> {
         System.out.println("tsaghik UPDATE_RECORD");
