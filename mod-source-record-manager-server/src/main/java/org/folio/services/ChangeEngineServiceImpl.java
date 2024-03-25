@@ -822,11 +822,14 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
    * @param records list of records
    */
   private void fillParsedRecordsWithAdditionalFields(List<Record> records) {
+    var empty = CollectionUtils.isEmpty(records);
+    System.out.println("tsaghik fillParsedRecordsWithAdditionalFields " + empty);
     if (!CollectionUtils.isEmpty(records)) {
       Record.RecordType recordType = records.get(0).getRecordType();
       if (MARC_BIB.equals(recordType) || MARC_HOLDING.equals(recordType)) {
         for (Record record : records) {
           if (record.getMatchedId() != null) {
+            System.out.println("tsaghik fillParsedRecordsWithAdditionalFields " + record.getParsedRecord().getContent());
             addFieldToMarcRecord(record, TAG_999, SUBFIELD_S, record.getMatchedId());
           }
         }
@@ -837,6 +840,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
               addFieldToMarcRecord(record, TAG_999, SUBFIELD_S, record.getMatchedId());
             }
             String inventoryId = UUID.randomUUID().toString();
+            System.out.println("tsaghik fillParsedRecordsWithAdditionalFields " + record.getParsedRecord().getContent());
             addFieldToMarcRecord(record, TAG_999, SUBFIELD_I, inventoryId);
             var hrid = getControlFieldValue(record, TAG_001).trim();
             record.setExternalIdsHolder(new ExternalIdsHolder().withAuthorityId(inventoryId).withAuthorityHrid(hrid));
