@@ -190,6 +190,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
         .map(parsedRecords))
       .onSuccess(parsedRecords -> {
         fillParsedRecordsWithAdditionalFields(parsedRecords);
+        System.out.println("tsaghik parsedRecords: " + parsedRecords.get(0).getParsedRecord().getContent().toString());
         processRecords(parsedRecords, jobExecution, params, sourceChunkId, promise);
       }).onFailure(th -> {
         LOGGER.warn("parseRawRecordsChunkForJobExecution:: Error parsing records: {}", th.getMessage());
@@ -202,6 +203,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
                               String sourceChunkId, Promise<List<Record>> promise) {
     switch (getAction(parsedRecords, jobExecution)) {
       case UPDATE_RECORD -> {
+        System.out.println("tsaghik UPDATE_RECORD");
         hrIdFieldService.move001valueTo035Field(parsedRecords);
         updateRecords(parsedRecords, jobExecution, params)
           .onSuccess(ar -> promise.complete(parsedRecords)).onFailure(promise::fail);
