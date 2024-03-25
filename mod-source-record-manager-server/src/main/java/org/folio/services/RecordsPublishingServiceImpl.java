@@ -129,6 +129,7 @@ import static org.folio.services.util.EventHandlingUtil.sendEventToKafka;
       LOGGER.warn("isParsedContentExists:: Record has no parsed content - event will not be sent");
       return false;
     }
+    System.out.println("tsaghik:: Record has parsed content" + currentRecord.getParsedRecord().getContent());
     return true;
   }
 

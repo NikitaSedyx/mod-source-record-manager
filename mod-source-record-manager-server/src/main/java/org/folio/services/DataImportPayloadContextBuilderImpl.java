@@ -49,7 +49,7 @@ class DataImportPayloadContextBuilderImpl implements DataImportPayloadContextBui
 
   private HashMap<String, String> createAndPopulateContext(EntityType entityType, Record initialRecord, String profileSnapshotWrapperId) {
     HashMap<String, String> context = new HashMap<>();
-
+    System.out.println("tsaghik initialRecord" + initialRecord.getParsedRecord().getContent());
     context.put(entityType.value(), Json.encode(initialRecord));
     context.put("JOB_PROFILE_SNAPSHOT_ID", profileSnapshotWrapperId);
     context.put("INCOMING_RECORD_ID", initialRecord.getId());
