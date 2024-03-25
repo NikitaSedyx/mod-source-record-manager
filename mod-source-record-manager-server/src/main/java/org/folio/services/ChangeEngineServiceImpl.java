@@ -189,6 +189,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
       .compose(parsedRecords -> ensureMappingMetaDataSnapshot(jobExecution.getId(), parsedRecords, params)
         .map(parsedRecords))
       .onSuccess(parsedRecords -> {
+        System.out.println("tsaghik parsedRecords size " + parsedRecords.size());
         fillParsedRecordsWithAdditionalFields(parsedRecords);
         processRecords(parsedRecords, jobExecution, params, sourceChunkId, promise);
       }).onFailure(th -> {
