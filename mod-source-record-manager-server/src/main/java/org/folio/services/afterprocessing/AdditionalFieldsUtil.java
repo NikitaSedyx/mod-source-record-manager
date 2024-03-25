@@ -32,14 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Consumer;
 
@@ -172,7 +165,7 @@ public final class AdditionalFieldsUtil {
     return result;
   }
 
-  private static String reorderMarcRecordFields(String sourceContent, String targetContent) {
+  public static String reorderMarcRecordFields(String sourceContent, String targetContent) {
     try {
       var parsedContent = objectMapper.readTree(targetContent);
       var fieldsArrayNode = (ArrayNode) parsedContent.path(FIELDS);
@@ -201,28 +194,40 @@ public final class AdditionalFieldsUtil {
     }
   }
 
+  private static Map<String, Queue<JsonNode>> groupNodesByTag(ArrayNode fieldsArrayNode) {
+    Map<String, Queue<JsonNode>> jsonNodesByTag = new LinkedHashMap<>();
+    for (JsonNode node : fieldsArrayNode) {
+      String tag = getTagFromNode(node);
+      jsonNodesByTag.putIfAbsent(tag, new LinkedList<>());
+      jsonNodesByTag.get(tag).add(node);
+    }
+    return jsonNodesByTag;
+  }
+
+  private static String getTagFromNode(JsonNode node) {
+    return node.fieldNames().next();
+  }
+
   private static List<String> getSourceFields(String source) {
     List<String> sourceFields = new ArrayList<>();
+    List<String> remainingFields = new ArrayList<>();
     try {
       var sourceJson = objectMapper.readTree(source);
       var fieldsNode = sourceJson.get(FIELDS);
+
       for (JsonNode fieldNode : fieldsNode) {
         String tag = fieldNode.fieldNames().next();
-        sourceFields.add(tag);
+        if (tag.equals("001") || tag.equals("005")) {
+          sourceFields.add(tag);
+        } else {
+          remainingFields.add(tag);
+        }
       }
+      sourceFields.addAll(remainingFields);
     } catch (Exception e) {
       LOGGER.error("An error occurred while parsing source JSON: {}", e.getMessage(), e);
     }
     return sourceFields;
-  }
-
-  private static Map<String, Queue<JsonNode>> groupNodesByTag(ArrayNode fieldsArrayNode) {
-    Map<String, Queue<JsonNode>> jsonNodesByTag = new HashMap<>();
-    fieldsArrayNode.forEach(node -> {
-      String tag = node.fieldNames().next();
-      jsonNodesByTag.computeIfAbsent(tag, k -> new LinkedList<>()).add(node);
-    });
-    return jsonNodesByTag;
   }
 
   /**
