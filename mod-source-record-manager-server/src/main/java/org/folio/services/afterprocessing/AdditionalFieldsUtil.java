@@ -151,9 +151,11 @@ public final class AdditionalFieldsUtil {
           jsonWriter.write(marcRecord);
 
           String parsedContentString = new JsonObject(os.toString()).encode();
+          System.out.println(" tsaghik addFieldToMarcRecord:: parsedContentString: " + parsedContentString);
           parsedRecordContentCache.invalidate(record.getParsedRecord().getContent());
           // save parsed content string to cache then set it on the record
           var content = reorderMarcRecordFields(record.getParsedRecord().getContent().toString(), parsedContentString);
+          System.out.println(" tsaghik addFieldToMarcRecord:: content: " + content);
           parsedRecordContentCache.put(content, marcRecord);
           record.setParsedRecord(record.getParsedRecord().withContent(content));
           result = true;
