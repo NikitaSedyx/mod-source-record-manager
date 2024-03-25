@@ -215,8 +215,10 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
         .onSuccess(ar -> promise.complete(parsedRecords)).onFailure(promise::fail);
       case SEND_ERROR -> sendEvents(parsedRecords, jobExecution, params, DI_ERROR)
         .onSuccess(ar -> promise.complete(parsedRecords)).onFailure(promise::fail);
-      case SEND_MARC_BIB -> sendEvents(parsedRecords, jobExecution, params, DI_INCOMING_MARC_BIB_RECORD_PARSED)
-        .onSuccess(ar -> promise.complete(parsedRecords)).onFailure(promise::fail);
+      case SEND_MARC_BIB ->{
+        System.out.println("tsaghik bib " + parsedRecords.get(0).getParsedRecord().getContent());
+        sendEvents(parsedRecords, jobExecution, params, DI_INCOMING_MARC_BIB_RECORD_PARSED)
+        .onSuccess(ar -> promise.complete(parsedRecords)).onFailure(promise::fail);}
       case SEND_EDIFACT -> sendEvents(parsedRecords, jobExecution, params, DI_INCOMING_EDIFACT_RECORD_PARSED)
         .onSuccess(ar -> promise.complete(parsedRecords)).onFailure(promise::fail);
       default -> saveRecords(jobExecution, sourceChunkId, params, parsedRecords, promise);
