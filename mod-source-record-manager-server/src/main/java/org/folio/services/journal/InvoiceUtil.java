@@ -107,7 +107,6 @@ public class InvoiceUtil {
         .withActionType(ActionType.CREATE)
         .withActionDate(new Date())
         .withActionStatus(isInvoiceIncorrect(eventPayload) ? ActionStatus.ERROR : ActionStatus.COMPLETED)
-        .withTenantId(eventPayload.getTenant())
         .withError(eventPayload.getEventType().equals(DI_ERROR.value()) ?
           eventPayload.getContext().get(ERROR_KEY) : "");
 
@@ -154,7 +153,6 @@ public class InvoiceUtil {
           .withActionDate(new Date())
           .withActionStatus(isInvoiceIncorrect || (errorInvoiceLinesMap.containsKey(invoiceLineNumber)) ?
             ActionStatus.ERROR : ActionStatus.COMPLETED)
-          .withTenantId(eventPayload.getTenant())
           .withError(isInvoiceIncorrect ?
             eventPayload.getContext().get(ERROR_KEY) : errorInvoiceLinesMap.getOrDefault(invoiceLineNumber, ""));
 
@@ -182,7 +180,6 @@ public class InvoiceUtil {
         .withActionType(ActionType.CREATE)
         .withActionDate(new Date())
         .withActionStatus(ActionStatus.ERROR)
-        .withTenantId(eventPayload.getTenant())
         .withError(eventPayload.getContext().get(ERROR_KEY));
 
       JournalRecord journalRecordEdifact = new JournalRecord()
@@ -194,7 +191,6 @@ public class InvoiceUtil {
         .withActionType(ActionType.CREATE)
         .withActionDate(new Date())
         .withActionStatus(ActionStatus.ERROR)
-        .withTenantId(eventPayload.getTenant())
         .withError(eventPayload.getContext().get(ERROR_KEY));
 
       return Arrays.asList(journalRecordEdifact, journalRecordInvoice);

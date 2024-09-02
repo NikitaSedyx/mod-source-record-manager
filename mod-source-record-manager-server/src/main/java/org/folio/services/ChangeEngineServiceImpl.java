@@ -25,7 +25,6 @@ import static org.folio.services.afterprocessing.AdditionalFieldsUtil.addFieldTo
 import static org.folio.services.afterprocessing.AdditionalFieldsUtil.getControlFieldValue;
 import static org.folio.services.afterprocessing.AdditionalFieldsUtil.getValue;
 import static org.folio.services.afterprocessing.AdditionalFieldsUtil.hasIndicator;
-import static org.folio.services.journal.JournalUtil.getJournalMessageProducer;
 import static org.folio.services.util.EventHandlingUtil.sendEventToKafka;
 import static org.folio.verticle.consumers.StoredRecordChunksKafkaHandler.ACTION_FIELD;
 import static org.folio.verticle.consumers.StoredRecordChunksKafkaHandler.CREATE_ACTION;
@@ -35,8 +34,6 @@ import static org.folio.verticle.consumers.StoredRecordChunksKafkaHandler.ORDER_
 import com.google.common.collect.Lists;
 import io.vertx.core.Future;
 import io.vertx.core.Promise;
-import io.vertx.core.Vertx;
-import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.json.jackson.DatabindCodec;
@@ -64,9 +61,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.folio.MappingProfile;
-import org.folio.rest.jaxrs.model.IncomingRecord;
 import org.folio.services.exceptions.InvalidJobProfileForFileException;
-import org.folio.services.journal.BatchableJournalRecord;
 import org.folio.services.journal.JournalUtil;
 import org.folio.dao.JobExecutionSourceChunkDao;
 import org.folio.dataimport.util.OkapiConnectionParams;
@@ -143,7 +138,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
   private final KafkaConfig kafkaConfig;
   private final FieldModificationService fieldModificationService;
   private final IncomingRecordService incomingRecordService;
-  private MessageProducer<Collection<BatchableJournalRecord>> journalRecordProducer;
+  private final JournalRecordService journalRecordService;
 
   @Value("${srm.kafka.RawChunksKafkaHandler.maxDistributionNum:100}")
   private int maxDistributionNum;
@@ -161,7 +156,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
                                  @Autowired KafkaConfig kafkaConfig,
                                  @Autowired FieldModificationService fieldModificationService,
                                  @Autowired IncomingRecordService incomingRecordService,
-                                 @Autowired Vertx vertx) {
+                                 @Autowired JournalRecordService journalRecordService) {
     this.jobExecutionSourceChunkDao = jobExecutionSourceChunkDao;
     this.jobExecutionService = jobExecutionService;
     this.marcRecordAnalyzer = marcRecordAnalyzer;
@@ -172,7 +167,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
     this.kafkaConfig = kafkaConfig;
     this.fieldModificationService = fieldModificationService;
     this.incomingRecordService = incomingRecordService;
-    this.journalRecordProducer = getJournalMessageProducer(vertx);
+    this.journalRecordService = journalRecordService;
   }
 
   @Override
@@ -317,11 +312,7 @@ public class ChangeEngineServiceImpl implements ChangeEngineService {
   private void saveIncomingAndJournalRecords(List<Record> parsedRecords, String tenantId) {
     if (!parsedRecords.isEmpty()) {
       incomingRecordService.saveBatch(JournalUtil.buildIncomingRecordsByRecords(parsedRecords), tenantId);
-      List<BatchableJournalRecord> batchableJournalRecords = JournalUtil.buildJournalRecordsByRecords(parsedRecords)
-        .stream()
-        .map(r -> new BatchableJournalRecord(r, tenantId))
-        .toList();
-      journalRecordProducer.write(batchableJournalRecords);
+      journalRecordService.saveBatch(JournalUtil.buildJournalRecordsByRecords(parsedRecords), tenantId);
     }
   }
 
